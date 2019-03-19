@@ -20,6 +20,6 @@ fi
 
 export distro="$1"
 
-docker build -f .ros2ci/Dockerfile.$distro -t ${TRAVIS_REPO_SLUG}:$distro --build-arg REPO_SLUG=${TRAVIS_REPO_SLUG} .
+docker build -f .ros2ci/Dockerfile.$distro -t ${TRAVIS_REPO_SLUG,,}:$distro --build-arg REPO_SLUG=${TRAVIS_REPO_SLUG} .
 
-docker run -v ${TRAVIS_BUILD_DIR}:/root/ros2_ws/src/${TRAVIS_REPO_SLUG} ${TRAVIS_REPO_SLUG}:$distro /root/ros2_ws/ci_script.bash
+docker run -v ${TRAVIS_BUILD_DIR}:/root/ros2_ws/src/${TRAVIS_REPO_SLUG} ${TRAVIS_REPO_SLUG,,}:$distro /root/ros2_ws/ci_script.bash
