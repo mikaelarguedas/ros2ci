@@ -27,15 +27,13 @@ RUN apt-get -qq update && \
 ARG REPO_SLUG=repo/to/test
 ARG CI_FOLDER=.ros2ci
 
-ENV ROS2_OVERLAY_WS /opt/ros2_overlay_ws
-# underlay workspace
-# clone underlay
+# setup underlay
 ENV ROS2_UNDERLAY_WS /opt/ros2_underlay_ws
-# copy optional ci_script.bash and additional_repos.repos to workspace
-COPY ./$CI_FOLDER/*.bash* ./$CI_FOLDER/additional_repos.repos* $ROS2_OVERLAY_WS/
+# copy optional additional_repos.repos
+COPY ./$CI_FOLDER/additional_repos.repos $ROS2_UNDERLAY_WS/
 RUN mkdir -p $ROS2_UNDERLAY_WS/src
 WORKDIR $ROS2_UNDERLAY_WS
-RUN if [ -f additional_repos.repos ]; then vcs import $ROS2_UNDERLAY_WS/src < $ROS2_OVERLAY_WS/additional_repos.repos; fi
+RUN if [ -f additional_repos.repos ]; then vcs import src < additional_repos.repos; fi
 # build underlay
 RUN apt-get -qq update && rosdep install -y \
     --from-paths src \
@@ -44,15 +42,19 @@ RUN apt-get -qq update && rosdep install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon \
     build \
-    --cmake-args -DSECURITY=ON -DBUILD_TESTING=OFF --no-warn-unused-cli \
-    --symlink-install
-ENV ROS2_UNDERLAY_SETUP $ROS2_UNDERLAY_WS/install/setup.sh
-# clone overlay
+    --merge-install \
+    --cmake-args -DSECURITY=ON -DBUILD_TESTING=OFF --no-warn-unused-cli
+
+ENV ROS_PACKAGE_PATH=$ROS2_UNDERLAY_WS/install/share:$ROS_PACKAGE_PATH
+
+# setup overlay
+ENV ROS2_OVERLAY_WS /opt/ros2_overlay_ws
 RUN mkdir -p $ROS2_OVERLAY_WS/src/$REPO_SLUG
+COPY ./$CI_FOLDER/*.bash $ROS2_OVERLAY_WS/
 WORKDIR $ROS2_OVERLAY_WS
 
 # setup entrypoint
-COPY ./ros_entrypoint.sh /
+COPY ./$CI_FOLDER/ros_entrypoint.sh /
 
 ENTRYPOINT ["/ros_entrypoint.sh"]
 

@@ -2,5 +2,5 @@
 set -e
 
 # setup ros2 environment
-source "/opt/ros/$ROS_UNDERLAY_WS/install/setup.bash"
+source "$ROS2_UNDERLAY_WS/install/setup.bash"
 exec "$@"

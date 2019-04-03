@@ -15,13 +15,8 @@
 
 set -e
 
-# install dependencies
-rosdep update && apt-get -qq update && rosdep install -y \
-  --from-paths src \
-  --ignore-src \
-  --rosdistro $ROS_DISTRO \
-
-# build
-colcon build \
-    --symlink-install \
-    --cmake-args -DSECURITY=ON --no-warn-unused-cli
+# test
+colcon test \
+    --executor sequential \
+    --event-handlers console_direct+
+colcon test-result

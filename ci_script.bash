@@ -16,3 +16,4 @@
 set -e
 
 ./build_workspace.bash
+./test_workspace.bash
