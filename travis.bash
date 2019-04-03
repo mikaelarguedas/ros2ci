@@ -1,4 +1,4 @@
-#!/bin/bash
+# !/bin/bash
 # Copyright 2019 Mikael Arguedas
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,13 +13,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [[ "$1" != "crystal" ]] && [[ "$1" != "nightly" ]]; then
+if [[ "$1" != "crystal" ]] && [[ "$1" != "dashing" ]] && [[ "$1" != "nightly" ]]; then
   echo "'$1' distro not supported"
   exit -1;
+elif [[ "$1" == "nightly" ]]; then
+  export base_image="osrf/ros2:nightly";
+  # change this to dashing once first dashing nightlies are available
+  export ros_distro="crystal"
+elif [[ "$1" == "crystal" ]] || [[ "$1" == "dashing" ]]; then
+  export base_image="osrf/ros2:devel";
+  export ros_distro="$1"
 fi
 
 export distro="$1"
 
-docker build -f .ros2ci/Dockerfile.$distro -t ${TRAVIS_REPO_SLUG,,}:$distro --build-arg REPO_SLUG=${TRAVIS_REPO_SLUG} .
+docker build -f .ros2ci/Dockerfile -t ${TRAVIS_REPO_SLUG,,}:$distro --build-arg REPO_SLUG=${TRAVIS_REPO_SLUG} --build-arg FROM_IMAGE=$base_image --build-arg ROS_DISTRO=$ros_distro .
 
-docker run -v ${TRAVIS_BUILD_DIR}:/root/ros2_ws/src/${TRAVIS_REPO_SLUG} ${TRAVIS_REPO_SLUG,,}:$distro /root/ros2_ws/ci_script.bash
+docker run -v ${TRAVIS_BUILD_DIR}:/opt/ros2_overlay_ws/src/${TRAVIS_REPO_SLUG} ${TRAVIS_REPO_SLUG,,}:$distro /opt/ros2_overlay_ws/ci_script.bash

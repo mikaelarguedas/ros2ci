@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 # Copyright 2019 Mikael Arguedas
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +15,13 @@
 
 set -e
 
-./build_workspace.bash
-./test_workspace.bash
+# install dependencies
+rosdep update && apt-get -qq update && rosdep install -y \
+  --from-paths src \
+  --ignore-src \
+  --rosdistro $ROS_DISTRO \
+
+# build
+colcon build \
+    --symlink-install \
+    --cmake-args -DSECURITY=ON --no-warn-unused-cli

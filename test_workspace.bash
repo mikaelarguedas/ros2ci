@@ -1,4 +1,4 @@
-#!/bin/bash
+#! /bin/bash
 # Copyright 2019 Mikael Arguedas
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,5 +15,8 @@
 
 set -e
 
-./build_workspace.bash
-./test_workspace.bash
+# test
+colcon test \
+    --executor sequential \
+    --event-handlers console_direct+
+colcon test-result
