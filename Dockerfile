@@ -49,4 +49,11 @@ RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon \
 ENV ROS2_UNDERLAY_SETUP $ROS2_UNDERLAY_WS/install/setup.sh
 # clone overlay
 RUN mkdir -p $ROS2_OVERLAY_WS/src/$REPO_SLUG
-CMD ['. $ROS2_UNDERLAY_SETUP && cd $ROS2_OVERLAY_WS && bash']
+WORKDIR $ROS2_OVERLAY_WS
+
+# setup entrypoint
+COPY ./ros_entrypoint.sh /
+
+ENTRYPOINT ["/ros_entrypoint.sh"]
+
+CMD ['bash']
