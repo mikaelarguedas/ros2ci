@@ -42,7 +42,6 @@ RUN apt-get -qq update && rosdep install -y \
     && rm -rf /var/lib/apt/lists/*
 RUN . /opt/ros/$ROS_DISTRO/setup.sh && colcon \
     build \
-    --merge-install \
     --cmake-args -DSECURITY=ON -DBUILD_TESTING=OFF --no-warn-unused-cli
 
 ENV ROS_PACKAGE_PATH=$ROS2_UNDERLAY_WS/install/share:$ROS_PACKAGE_PATH
