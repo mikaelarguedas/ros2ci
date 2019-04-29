@@ -24,10 +24,6 @@ RUN apt-get -qq update && \
     apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y && \
     rm -rf /var/lib/apt/lists/*
 
-# TODO: remove this when colcon-core 0.3.20 is released
-RUN python3 -m pip install -U \
-    git+git://github.com/colcon/colcon-core.git@master#egg=colcon-core
-
 ARG REPO_SLUG=repo/to/test
 ARG CI_FOLDER=.ros2ci
 
