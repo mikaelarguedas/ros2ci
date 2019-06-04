@@ -15,5 +15,33 @@
 
 set -e
 
-./build_workspace.bash
-./test_workspace.bash
+function install_dependencies() {
+# install dependencies
+apt-get -qq update && rosdep update && rosdep install -y \
+  --from-paths src \
+  --ignore-src \
+  --rosdistro $ROS_DISTRO
+}
+
+function build_workspace() {
+colcon build \
+    --symlink-install \
+    --cmake-args -DSECURITY=ON --no-warn-unused-cli
+}
+
+function test_workspace() {
+
+colcon test \
+    --executor sequential \
+    --event-handlers console_direct+
+# use colcon test-result to get list of failures and return error code accordingly
+colcon test-result
+}
+
+install_dependencies
+
+# source ROS_DISTRO in case newly installed packages modified environment
+source /opt/ros/$ROS_DISTRO/setup.bash
+
+build_workspace
+test_workspace
