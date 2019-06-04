@@ -24,6 +24,14 @@ RUN apt-get -qq update && \
     apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y && \
     rm -rf /var/lib/apt/lists/*
 
+# Work around pytest not found issue https://github.com/osrf/docker_images/issues/270
+RUN apt-get -qq update \
+    && apt-get remove -y python3-colcon-core python3-pytest python3-pytest-cov \
+    && apt-get autoremove \
+    && python3 -m pip install -U colcon-common-extensions \
+    && python3 -m pip freeze | grep pytest \
+    && python3 -m pytest --version
+
 ARG REPO_SLUG=repo/to/test
 ARG CI_FOLDER=.ros2ci
 
