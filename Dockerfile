@@ -15,7 +15,7 @@
 ARG FROM_IMAGE=osrf/ros2:devel
 FROM $FROM_IMAGE
 
-ARG ROS_DISTRO=crystal
+ARG ROS_DISTRO=eloquent
 ENV ROS_DISTRO=$ROS_DISTRO
 
 # install building tools
