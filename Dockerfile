@@ -15,13 +15,13 @@
 ARG FROM_IMAGE=osrf/ros2:devel
 FROM $FROM_IMAGE
 
-ARG ROS_DISTRO=eloquent
+ARG ROS_DISTRO=foxy
 ENV ROS_DISTRO=$ROS_DISTRO
 
 # install building tools
 RUN apt-get -qq update && \
     apt-get -qq upgrade -y && \
-    apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y && \
+    if [ -e /opt/ros/$ROS_DISTRO/setup.bash ]; then true; else apt-get -qq install ros-$ROS_DISTRO-ros-workspace -y; fi && \
     rm -rf /var/lib/apt/lists/*
 
 ARG REPO_SLUG=repo/to/test
