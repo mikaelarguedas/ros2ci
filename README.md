@@ -7,8 +7,10 @@ These scripts are experimental and subject to change.
 
 ## ROS 2 distributions supported:
 
-- ROS 2 Crystal
-- ROS 2 nightly builds
+- Crystal
+- Dashing
+- Eloquent
+- nightly builds
 
 ## Operating Systems supported
 
