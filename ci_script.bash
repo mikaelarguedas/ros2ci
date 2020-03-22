@@ -17,7 +17,9 @@ set -e
 
 function install_dependencies() {
 # install dependencies
-apt-get -qq update && rosdep update && rosdep install -y \
+apt-get -qq update && \
+rosdep update --rosdistro $ROS_DISTRO && \
+rosdep install -y \
   --from-paths src \
   --ignore-src \
   --rosdistro $ROS_DISTRO
