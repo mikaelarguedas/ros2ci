@@ -70,11 +70,11 @@ function setup_coverage() {
   #  export MIXIN_TEST="$MIXIN_TEST coverage-py"
   export COLCON_TEST_EXTRA_ARGS="$COLCON_TEST_EXTRA_ARGS --pytest-with-coverage"
   export COLCON_EXTRA_PYTEST_ARGS="$COLCON_EXTRA_PYTEST_ARGS --cov-report=term"
-  # install coverage deps
-  pip3 install --user colcon-lcov-result
-  apt -qq update && apt -qq install -y lcov
-  # initialize lcov ?
-  colcon lcov-result --initial
+  # # install coverage deps
+  # pip3 install --user colcon-lcov-result
+  # apt -qq update && apt -qq install -y lcov
+  # # initialize lcov ?
+  # colcon lcov-result --initial
 }
 
 install_dependencies
@@ -91,7 +91,7 @@ source install/setup.bash
 test_workspace
 
 if [[ -n "${COVERAGE}" ]]; then
-  colcon lcov-result
+  # colcon lcov-result
   # copy all coverage files outside container for upload
   echo "need to copy coverage results"
   find -name coverage.xml
