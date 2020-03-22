@@ -26,7 +26,7 @@ rosdep install -y \
 }
 
 function build_workspace() {
-echo "
+cmd="
 colcon build \
     --event-handlers console_package_list+ \
     --symlink-install \
@@ -34,13 +34,16 @@ colcon build \
     --mixin $MIXIN_BUILD build-testing-on \
     ${COLCON_BUILD_EXTRA_ARGS}
 "
-colcon build \
-    --event-handlers console_package_list+ \
-    --symlink-install \
-    --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
-    --mixin $MIXIN_BUILD build-testing-on \
-    ${COLCON_BUILD_EXTRA_ARGS}
+echo "$cmd"
+cmd
 
+# colcon build \
+#     --event-handlers console_package_list+ \
+#     --symlink-install \
+#     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
+#     --mixin $MIXIN_BUILD build-testing-on \
+#     ${COLCON_BUILD_EXTRA_ARGS}
+# 
 }
 
 function test_workspace() {
@@ -70,6 +73,8 @@ function setup_coverage() {
   #  export MIXIN_TEST="$MIXIN_TEST coverage-py"
   export COLCON_TEST_EXTRA_ARGS="$COLCON_TEST_EXTRA_ARGS --pytest-with-coverage"
   export COLCON_EXTRA_PYTEST_ARGS="$COLCON_EXTRA_PYTEST_ARGS --cov-report=term"
+
+  apt -qq update && apt -qq install -y curl
   # # install coverage deps
   # pip3 install --user colcon-lcov-result
   # apt -qq update && apt -qq install -y lcov
@@ -93,6 +98,11 @@ test_workspace
 if [[ -n "${COVERAGE}" ]]; then
   # colcon lcov-result
   # copy all coverage files outside container for upload
-  echo "need to copy coverage results"
-  find -name coverage.xml
+  cd $ROS2_OVERLAY_WS/build
+  echo "copying coverage report files"
+  for file in $(find -name coverage.xml)
+  do
+    mkdir -p $(dirname $ROS2_OVERLAY_WS/coverage/$file)
+    cp $file $ROS2_OVERLAY_WS/coverage/$file
+  done
 fi
