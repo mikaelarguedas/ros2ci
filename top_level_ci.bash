@@ -20,10 +20,10 @@ elif [[ "$1" == "nightly" ]]; then
   export base_image="osrf/ros2:nightly";
   export ros_distro="foxy"
   export dockerfile=".ros2ci/Dockerfile"
-# elif [[ "$1" == "source" ]]; then
-#   export base_image="osrf/ros2:devel";
-#   export ros_distro="foxy"
-#   export dockerfile=".ros2ci/Dockerfile.source"
+elif [[ "$1" == "source" ]]; then
+  export base_image="osrf/ros2:devel";
+  export ros_distro="foxy"
+  export dockerfile=".ros2ci/Dockerfile.source"
 else
   export base_image="osrf/ros2:devel";
   export ros_distro="$1"
@@ -34,7 +34,7 @@ if [[ -n ${GITHUB_ACTIONS} ]]; then
   event_type=${GITHUB_EVENT_NAME}
   repo_slug=${GITHUB_REPOSITORY}
   workspace=${GITHUB_WORKSPACE}
-elif [[ -n ${TRAVIS} ]]; then
+elif [[ -n ${TRAVIS} ]]; then 
   event_type=${TRAVIS_EVENT_TYPE}
   repo_slug=${TRAVIS_REPO_SLUG}
   workspace=${TRAVIS_BUILD_DIR}
