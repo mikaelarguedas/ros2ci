@@ -29,26 +29,34 @@ colcon build \
     --event-handlers console_package_list+ \
     --symlink-install \
     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
-    --mixins $MIXIN_BUILD build-testing-on \
+    --mixin $MIXIN_BUILD build-testing-on \
     ${COLCON_BUILD_EXTRA_ARGS}
 "
 colcon build \
     --event-handlers console_package_list+ \
     --symlink-install \
     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
-    --mixins $MIXIN_BUILD build-testing-on \
+    --mixin $MIXIN_BUILD build-testing-on \
     ${COLCON_BUILD_EXTRA_ARGS}
 
 }
 
 function test_workspace() {
 
+echo "
 colcon test \
     --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
     --executor sequential \
     --mixin $MIXIN_TEST \
     --event-handlers console_direct+ \
-    "${COLCON_TEST_EXTRA_ARGS}"
+    ${COLCON_TEST_EXTRA_ARGS}
+"
+colcon test \
+    --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
+    --executor sequential \
+    --mixin $MIXIN_TEST \
+    --event-handlers console_direct+ \
+    ${COLCON_TEST_EXTRA_ARGS}
 # use colcon test-result to get list of failures and return error code accordingly
 colcon test-result
 }
