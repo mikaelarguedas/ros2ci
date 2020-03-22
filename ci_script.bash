@@ -24,12 +24,21 @@ apt-get -qq update && rosdep update && rosdep install -y \
 }
 
 function build_workspace() {
+echo "
 colcon build \
     --event-handlers console_package_list+ \
     --symlink-install \
     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
     --mixins $MIXIN_BUILD build-testing-on \
-    "${COLCON_BUILD_EXTRA_ARGS}"
+    ${COLCON_BUILD_EXTRA_ARGS}
+"
+colcon build \
+    --event-handlers console_package_list+ \
+    --symlink-install \
+    --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
+    --mixins $MIXIN_BUILD build-testing-on \
+    ${COLCON_BUILD_EXTRA_ARGS}
+
 }
 
 function test_workspace() {
