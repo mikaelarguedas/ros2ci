@@ -53,4 +53,23 @@ export distro="$1"
 
 docker build -f $dockerfile -t ${repo_slug,,}:$distro --build-arg REPO_SLUG=${repo_slug} --build-arg FROM_IMAGE=$base_image --build-arg ROS_DISTRO=$ros_distro .
 
-docker run -v ${workspace}:/opt/ros2_overlay_ws/src/${repo_slug} ${repo_slug,,}:$distro /opt/ros2_overlay_ws/ci_script.bash
+docker run \
+  -v ${workspace}:/opt/ros2_overlay_ws/src/${repo_slug} \
+  -e MIXIN_BUILD \
+  -e MIXIN_TEST \
+  -e COLCON_EXTRA_ARGS \
+  -e COLCON_EXTRA_PYTEST_ARGS \
+  -e COLCON_EXTRA_CMAKE_ARGS \
+  -e COVERAGE \
+  ${repo_slug,,}:$distro \
+  /opt/ros2_overlay_ws/ci_script.bash
+# Planned env to use in the future
+# -e MIXINS_URL \
+# -e REPOS_FILE \
+# -e PRUNE_REPOS_FILE \
+# -e ROS_DISTRO \
+# -e ROS_REPO \
+# -e ABI_CHECK \
+# -e ROSDEP_SKIP_KEYS \
+# -e ROSDEP_RULES_URL \
+# -e PACKAGES_UP_TO \
