@@ -25,15 +25,21 @@ apt-get -qq update && rosdep update && rosdep install -y \
 
 function build_workspace() {
 colcon build \
+    --event-handlers console_package_list+ \
     --symlink-install \
-    --cmake-args -DSECURITY=ON --no-warn-unused-cli
+    --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
+    --mixins $MIXIN_BUILD build-testing-on \
+    "${COLCON_BUILD_EXTRA_ARGS}"
 }
 
 function test_workspace() {
 
 colcon test \
+    --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
     --executor sequential \
-    --event-handlers console_direct+
+    --mixin $MIXIN_TEST \
+    --event-handlers console_direct+ \
+    "${COLCON_TEST_EXTRA_ARGS}"
 # use colcon test-result to get list of failures and return error code accordingly
 colcon test-result
 }
