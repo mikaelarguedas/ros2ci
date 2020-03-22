@@ -44,4 +44,5 @@ install_dependencies
 source /opt/ros/$ROS_DISTRO/setup.bash
 
 build_workspace
+source install/setup.bash
 test_workspace

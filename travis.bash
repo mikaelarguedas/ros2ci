@@ -20,14 +20,20 @@ elif [[ "$1" == "nightly" ]]; then
   export base_image="osrf/ros2:nightly";
   export ros_distro="foxy"
   export dockerfile=".ros2ci/Dockerfile"
-# elif [[ "$1" == "source" ]]; then
-#   export base_image="osrf/ros2:devel";
-#   export ros_distro="foxy"
-#   export dockerfile=".ros2ci/Dockerfile.source"
-else
+elif [[ "$1" == "source" ]]; then
   export base_image="osrf/ros2:devel";
-  export ros_distro="$1"
-  export dockerfile=".ros2ci/Dockerfile"
+  export ros_distro="foxy"
+  export dockerfile=".ros2ci/Dockerfile.source"
+else
+  if [[ "$1" == "crystal" ]] || [[ "$1" == "dashing" ]] || [[ "$1" == "eloquent" ]]; then
+    export base_image="osrf/ros2:devel-bionic";
+    export ros_distro="$1"
+    export dockerfile=".ros2ci/Dockerfile"
+  else
+    export base_image="osrf/ros2:devel";
+    export ros_distro="$1"
+    export dockerfile=".ros2ci/Dockerfile"
+  fi
 fi
 
 if [[ -n ${GITHUB_ACTIONS} ]]; then

@@ -40,7 +40,7 @@ if [[ -n ${GITHUB_ACTIONS} ]]; then
   event_type=${GITHUB_EVENT_NAME}
   repo_slug=${GITHUB_REPOSITORY}
   workspace=${GITHUB_WORKSPACE}
-elif [[ -n ${TRAVIS} ]]; then 
+elif [[ -n ${TRAVIS} ]]; then
   event_type=${TRAVIS_EVENT_TYPE}
   repo_slug=${TRAVIS_REPO_SLUG}
   workspace=${TRAVIS_BUILD_DIR}
