@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
+set -ex
 
 function install_dependencies() {
 # install dependencies
@@ -26,44 +26,44 @@ rosdep install -y \
 }
 
 function build_workspace() {
-cmd="
-colcon build \
-    --event-handlers console_package_list+ \
-    --symlink-install \
-    --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
-    --mixin $MIXIN_BUILD build-testing-on \
-    ${COLCON_BUILD_EXTRA_ARGS}
-"
-echo "$cmd"
-$cmd
-
+# cmd="
 # colcon build \
 #     --event-handlers console_package_list+ \
 #     --symlink-install \
 #     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
 #     --mixin $MIXIN_BUILD build-testing-on \
 #     ${COLCON_BUILD_EXTRA_ARGS}
-# 
+# "
+# echo "$cmd"
+# $cmd
+
+colcon build \
+    --event-handlers console_package_list+ \
+    --symlink-install \
+    --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
+    --mixin $MIXIN_BUILD build-testing-on \
+    ${COLCON_BUILD_EXTRA_ARGS}
+
 }
 
 function test_workspace() {
 
-cmd="
-colcon test \
-    --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
-    --executor sequential \
-    --mixin $MIXIN_TEST \
-    --event-handlers console_direct+ \
-    ${COLCON_TEST_EXTRA_ARGS}
-"
-echo "$cmd"
-$cmd
+# cmd="
 # colcon test \
 #     --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
 #     --executor sequential \
 #     --mixin $MIXIN_TEST \
 #     --event-handlers console_direct+ \
 #     ${COLCON_TEST_EXTRA_ARGS}
+# "
+# echo "$cmd"
+# $cmd
+colcon test \
+    --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
+    --executor sequential \
+    --mixin $MIXIN_TEST \
+    --event-handlers console_direct+ \
+    ${COLCON_TEST_EXTRA_ARGS}
 # use colcon test-result to get list of failures and return error code accordingly
 colcon test-result
 }
