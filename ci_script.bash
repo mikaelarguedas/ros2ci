@@ -35,7 +35,7 @@ colcon build \
     ${COLCON_BUILD_EXTRA_ARGS}
 "
 echo "$cmd"
-cmd
+$cmd
 
 # colcon build \
 #     --event-handlers console_package_list+ \
@@ -48,7 +48,7 @@ cmd
 
 function test_workspace() {
 
-echo "
+cmd="
 colcon test \
     --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
     --executor sequential \
@@ -56,12 +56,14 @@ colcon test \
     --event-handlers console_direct+ \
     ${COLCON_TEST_EXTRA_ARGS}
 "
-colcon test \
-    --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
-    --executor sequential \
-    --mixin $MIXIN_TEST \
-    --event-handlers console_direct+ \
-    ${COLCON_TEST_EXTRA_ARGS}
+echo "$cmd"
+$cmd
+# colcon test \
+#     --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
+#     --executor sequential \
+#     --mixin $MIXIN_TEST \
+#     --event-handlers console_direct+ \
+#     ${COLCON_TEST_EXTRA_ARGS}
 # use colcon test-result to get list of failures and return error code accordingly
 colcon test-result
 }
