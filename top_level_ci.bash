@@ -58,6 +58,7 @@ docker build -f $dockerfile -t ${repo_slug,,}:$distro --build-arg REPO_SLUG=${re
 docker run \
   -v ${workspace}:/opt/ros2_overlay_ws/src/${repo_slug} \
   -v ${workspace}/coverage:/opt/ros2_overlay_ws/coverage \
+  -v ${workspace}/logs:/opt/ros2_overlay_ws/log \
   -e MIXIN_BUILD \
   -e MIXIN_TEST \
   -e COLCON_EXTRA_ARGS \
