@@ -13,16 +13,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -ex
+# set -ex
+set -e
+
+source ./bash_util.bash
 
 function install_dependencies() {
 # install dependencies
+run_command "
 apt-get -qq update && \
 rosdep update --rosdistro $ROS_DISTRO && \
 rosdep install -y \
   --from-paths src \
   --ignore-src \
   --rosdistro $ROS_DISTRO
+"
 }
 
 function build_workspace() {
@@ -36,14 +41,14 @@ function build_workspace() {
 # "
 # echo "$cmd"
 # $cmd
-
+run_command "
 colcon build \
     --event-handlers console_package_list+ \
     --symlink-install \
     --cmake-args $COLCON_EXTRA_CMAKE_ARGS --no-warn-unused-cli \
     --mixin $MIXIN_BUILD build-testing-on \
     ${COLCON_BUILD_EXTRA_ARGS}
-
+"
 }
 
 function test_workspace() {
@@ -58,6 +63,7 @@ function test_workspace() {
 # "
 # echo "$cmd"
 # $cmd
+run_command "
 colcon test \
     --pytest-args $COLCON_EXTRA_PYTEST_ARGS \
     --executor sequential \
@@ -66,6 +72,7 @@ colcon test \
     ${COLCON_TEST_EXTRA_ARGS}
 # use colcon test-result to get list of failures and return error code accordingly
 colcon test-result
+"
 }
 
 function setup_coverage() {
@@ -76,7 +83,7 @@ function setup_coverage() {
   export COLCON_TEST_EXTRA_ARGS="$COLCON_TEST_EXTRA_ARGS --pytest-with-coverage"
   export COLCON_EXTRA_PYTEST_ARGS="$COLCON_EXTRA_PYTEST_ARGS --cov-report=term"
 
-  apt -qq update && apt -qq install -y curl
+  # apt-get -qq update && apt-get -qq install -y curl
   # # install coverage deps
   # pip3 install --user colcon-lcov-result
   # apt -qq update && apt -qq install -y lcov
