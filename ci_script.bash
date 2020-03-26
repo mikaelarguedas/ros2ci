@@ -26,7 +26,7 @@ rosdep update --rosdistro $ROS_DISTRO && \
 rosdep install -y \
   --from-paths src \
   --ignore-src \
-  --rosdistro $ROS_DISTRO
+  --rosdistro $ROS_DISTRO \
 "
 }
 
