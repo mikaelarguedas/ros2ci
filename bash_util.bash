@@ -17,5 +17,5 @@
 function run_command () {
 
 echo "Invoking $1"
-$1
+bash -c "$1"
 }

@@ -26,7 +26,7 @@ rosdep update --rosdistro $ROS_DISTRO && \
 rosdep install -y \
   --from-paths src \
   --ignore-src \
-  --rosdistro $ROS_DISTRO \
+  --rosdistro $ROS_DISTRO
 "
 }
 
@@ -91,6 +91,7 @@ function setup_coverage() {
   # colcon lcov-result --initial
 }
 
+run_command "echo 'test'"
 install_dependencies
 
 # source ROS_DISTRO in case newly installed packages modified environment
