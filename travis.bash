@@ -13,6 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+set -ex
+
 if [[ "$1" != "crystal" ]] && [[ "$1" != "dashing" ]] && [[ "$1" != "eloquent" ]] && [[ "$1" != "nightly" ]]; then
   echo "'$1' distro not supported"
   exit -1;
@@ -45,7 +47,7 @@ elif [[ -n ${TRAVIS} ]]; then
   repo_slug=${TRAVIS_REPO_SLUG}
   workspace=${TRAVIS_BUILD_DIR}
 else
-  echo "onky supporting travis and github actions at the moment"
+  echo "only supporting travis and github actions at the moment"
   return -1;
 fi
 
@@ -55,6 +57,7 @@ docker build -f $dockerfile -t ${repo_slug,,}:$distro --build-arg REPO_SLUG=${re
 
 docker run \
   -v ${workspace}:/opt/ros2_overlay_ws/src/${repo_slug} \
+  -v ${workspace}/coverage:/opt/ros2_overlay_ws/coverage \
   -e MIXIN_BUILD \
   -e MIXIN_TEST \
   -e COLCON_EXTRA_ARGS \
@@ -73,3 +76,10 @@ docker run \
 # -e ROSDEP_SKIP_KEYS \
 # -e ROSDEP_RULES_URL \
 # -e PACKAGES_UP_TO \
+
+
+if [[ "${COVERAGE}" == "codecov" ]]; then
+  # TODO test and update to handle multiple coverage.xml files
+  # TODO upload gcov/lcov reports as well
+  bash <(curl -s https://codecov.io/bash) -f `find ${workspace}/coverage -name coverage.xml` -R ${workspace}
+fi
